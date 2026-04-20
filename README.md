@@ -2,11 +2,12 @@
 <p align="center">
   <img src="images/Panel 1.jpg" alt="RESPAN" width="600">
 </p>
-RESPAN is an end‑to‑end, GPU‑accelerated pipeline that restores, segments, and quantifies dendrites and dendritic spines in fluorescent microscopy images in a robust, accurate, and unbiased manner. While developing this pipeline, emphasis was placed on ensuring an efficient and accessible pipeline that leverages the latest advancements in content‑aware restoration, image segmentation, and GPU processing. 
-</p>
-For ease of use, RESPAN is available as both (i) a ready‑to‑run Windows application and (ii) Python scripts. 
-</p> Please note that this software requires a computer with an NVIDIA GPU. </p>
-Developed in collaboration with the Polleux Lab (Zuckerman Institute, Columbia University).
+RESPAN is an end‑to‑end, GPU‑accelerated pipeline that restores, segments, and quantifies dendrites and dendritic spines in fluorescent microscopy images in a robust, accurate, and unbiased manner. While developing this pipeline, emphasis was placed on ensuring an efficient and accessible pipeline that leverages the latest advancements in content‑aware restoration, image segmentation, and GPU processing. For ease of use, RESPAN is available as both (i) a ready‑to‑run Windows application and (ii) Python scripts. </p>
+Developed in collaboration with the Polleux Lab (Zuckerman Institute, Columbia University).</p></p>
+
+**If you use RESPAN as part of your research, please cite our work using the reference below:** </p>
+Sergio Bernal-Garcia, Alexa P. Schlotter, Daniela Pereira, Franck Polleux, Luke A. Hammond. (2025). A deep learning pipeline for accurate and automated restoration, segmentation, and quantification of dendritic spines. Cell Reports Methods 5(10):101179. doi:10.1016/j.crmeth.2025.101179
+
 </p>
 <p align="center">
   <img src="images/Panel 2.jpg" alt="RESPAN" width="600">
@@ -113,13 +114,14 @@ Detailed protocols – including data organisation and annotation tips – are i
 ---
 
 ## 🎯 Pre‑trained segmentation models
+Please complete a brief Google Form to access the RESPAN pretrained weights. The link appears on the next page following form submission. No account required. Takes ~30 seconds and lets us understand how and where our software is used.
   
-| Segmentation Model | Download | Modality | Resolution | Annotations | Details |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Model 1A | [download](https://drive.google.com/drive/folders/1j9XQi4x1-IsRvln_-dzR-vF94cuV35RZ?usp=drive_link) | Spinning disk and Airyscan/laser scanning confocal microscopy | 65 x 65 x 150nm | spines, dendrites, and soma | 224 datasets, including restored and raw data and additional augmentation |
-| Model 1B | [download](https://drive.google.com/drive/folders/1LTEO4aApPfTeTDEECMC-QJCpwWkL_C6w?usp=drive_link) | Spinning disk and Airyscan/laser scanning confocal microscopy | 65 x 65 x 150nm | spines core & shell, dendrites, axons, and soma | 44 datasets, including restored and raw data and additional augmentation |
-| Model 2 | [download](https://drive.google.com/drive/folders/1MTSU7acFDZOUs9q1t_0gwU9DIbckYugi?usp=drive_link) | Spinning disk confocal microscopy  | 65 x 65 x 65nm | spines, necks, dendrites, and soma | isotropic model, 7 datasets, no augmentation |
-| Model 3 |  [download](https://drive.google.com/drive/folders/1-KQc-Tzpk1dn3fgAln-KJrIIwM6amVFG?usp=drive_link) |Two-photon in vivo confocal microscopy  | 102 x 102 x 1000nm | spines and dendrites | 908 datasets, additional augmentation |
+| Segmentation Model | Download | Year | Modality | Resolution | Annotations | Details |
+| ------------- | ------------- | -------------| ------------- | ------------- | ------------- | ------------- |
+| Model 1A | [download](https://forms.gle/pUguQwn1V5vkSCKs9) | 2025 | Spinning disk and Airyscan/laser scanning confocal microscopy | 65 x 65 x 150nm | spines, dendrites, and soma | 224 datasets, including restored and raw data and additional augmentation |
+| Model 1Bv2 *recommended | [download](https://forms.gle/pUguQwn1V5vkSCKs9) | 2026 | Spinning disk and Airyscan/laser scanning confocal microscopy | 65 x 65 x 150nm | spines core & shell, dendrites, axons, and soma | 224 datasets, including restored and raw data and additional augmentation updated thanks to Sergio Bernal-Garcia and Columbia University colleagues |
+| Model 2 | [download](https://forms.gle/pUguQwn1V5vkSCKs9) | 2025 | Spinning disk confocal microscopy  | 65 x 65 x 65nm | spines, necks, dendrites, and soma | isotropic model, 7 datasets, no augmentation |
+| Model 3 |  [download](https://forms.gle/pUguQwn1V5vkSCKs9) | 2025 | Two-photon in vivo confocal microscopy  | 102 x 102 x 1000nm | spines and dendrites | 908 datasets, additional augmentation |
 
 For detailed protocols using RESPAN, please refer to [our manuscript.](https://www.biorxiv.org/content/10.1101/2024.06.06.597812v2)
 
@@ -139,10 +141,8 @@ CRITICAL: Ground truth annotations and the corresponding raw data volumes intend
 ---
 
 ## 📚 Publications
-
-If RESPAN assisted your research, please cite our work using the reference below:
 If you use RESPAN as part of your research, please cite our work using the reference below:</p>
-Sergio B. Garcia, Alexa P. Schlotter, Daniela Pereira, Franck Polleux, Luke A. Hammond. (2024) RESPAN: An Automated Pipeline for Accurate Dendritic Spine Mapping with Integrated Image Restoration. bioRxiv. doi: https://doi.org/10.1101/2024.06.06.597812</p></p>
+Sergio Bernal-Garcia, Alexa P. Schlotter, Daniela Pereira, Franck Polleux, Luke A. Hammond. (2025). A deep learning pipeline for accurate and automated restoration, segmentation, and quantification of dendritic spines. Cell Reports Methods 5(10):101179. doi:10.1016/j.crmeth.2025.101179</p></p>
 
 RESPAN is already supporting peer-reviewed studies:
 * Baptiste Libé-Philippot, Ryohei Iwata, Aleksandra J. Recupero, Keimpe Wierda, Sergio Bernal Garcia, Luke Hammond, Anja van Benthem, Ridha Limame, Martyna Ditkowska, Sofie Beckers, Vaiva Gaspariunaite, Eugénie Peze-Heidsieck, Daan Remans, Cécile Charrier, Tom Theys, Franck Polleux, Pierre Vanderhaeghen (2024)
