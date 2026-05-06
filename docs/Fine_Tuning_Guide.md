@@ -2,9 +2,9 @@
 
 > **Who this is for.** You've run RESPAN on your data, and in some images the model misses spines, adds spurious ones, or segments dendrites incorrectly. This guide walks you through **fine-tuning** our pretrained nnU-Net on a small set of your own corrected images, so the model learns your specific conditions (microscope, labeling, cell type) without you having to annotate from scratch.
 >
-> **Why fine-tune instead of train from scratch.** Training nnU-Net from scratch needs hundreds of annotated volumes and 12–24 hours on a GPU. Fine-tuning needs **as few as 5–10 corrected volumes** and usually finishes in 2–6 hours. You start from our pretrained weights and nudge them toward your data.
+> **Why fine-tune instead of train from scratch.** Training nnU-Net from scratch needs many annotated volumes and >24 hours on a GPU. Fine-tuning needs **as few as 5–10 corrected volumes** and can train in less time. You start from our pretrained weights and fine-tune them toward your data.
 >
-> **What you never need.** Access to the images we used to train our model. Fine-tuning works with the model file alone.
+> This does not require access to the images we used to train our model. Fine-tuning works with the model file alone.
 
 ---
 
@@ -36,7 +36,7 @@ Before you start, confirm you have:
 - [ ] **RESPAN installed** (either the Windows application or the Python environment from the main README).
 - [ ] **A working nnU-Net install.** If you're running RESPAN from source, you already have the `respan_nnunet` conda environment, that includes nnU-Net v2. If you're running the Windows `.exe`, you'll need to install nnU-Net separately into a conda environment (see the main README's "Advanced usage" section for the one-line install).
 - [ ] **5–20 images** from your own data that RESPAN has already analyzed, covering the problem cases you want the model to handle better.
-- [ ] **An annotation tool.** We recommend **Fiji** (ImageJ) since you may already use it for microscopy. [Napari](https://napari.org) and [ITK-SNAP](http://www.itksnap.org) also work and many find 3D editing easier in Napari.
+- [ ] **An annotation tool.** We recommend **Fiji** (ImageJ) since you may already use it for microscopy. [Napari](https://napari.org) and [ITK-SNAP](http://www.itksnap.org) are also suitible.
 - [ ] **About 10–20 GB of free disk space** for the nnU-Net working folders.
 
 Throughout this guide we'll use this running example:
@@ -99,7 +99,7 @@ After the run, RESPAN creates a `Validation_Data/Segmentation_Labels/` folder in
 |---|---|
 | 0 | Background |
 | 1 | Spine core |
-| 2 | Spine shell (membrane) |
+| 2 | Spine shell|
 | 3 | Dendrite |
 | 4 | Axon |
 | 5 | Soma |
@@ -128,7 +128,10 @@ For each of your 5–20 images, open the original image and RESPAN's segmentatio
 6. Scroll through Z one slice at a time and fix what you see.
 7. `File → Save As → Tiff...`, **save as a 16-bit unsigned TIFF** (or 8-bit if the label count is small, either works as long as it's unsigned integer, not float).
 
-**In Napari (often easier for 3D):**
+
+We also provide imageJ macros for converted labels to channels and then back to labels. These make editing annotations easier.
+
+**In Napari:**
 
 ```python
 import napari, tifffile
@@ -142,10 +145,9 @@ tifffile.imwrite('my_image_corrected.tif', labels.data.astype('uint8'))
 
 **Quality tips:**
 
-- You don't have to be perfect. Fine-tuning improves the model; it doesn't demand pixel-perfect labels.
 - Focus on **systematic mistakes**, if RESPAN consistently misses one spine class, that's what fine-tuning will fix.
 - Do **not** mix label schemes. If RESPAN's output used `1=spine core, 2=spine shell, 3=dendrite`, your corrected file must use the same integers.
-- Save the final file with **the same voxel dimensions and the same shape** as the original image. nnU-Net checks this.
+- Scaling is important, and in the current version of RESPAN we have set scalling to 1,1,1 and handle scaling internally, to ensure better handling of scaling for large datasets. This present a challenge for fine tuning as nnunet can't autoscale your data to match model. To address this, after annotating, it will best to rescale the raw and label data to match the native resolution of the model. Avoid interpolating or averaging when scaling label data as it will alter the label values.
 
 At the end of Step 2 you should have a set of paired files like:
 
@@ -467,7 +469,7 @@ nnU-Net saves a checkpoint **after every epoch** into `nnUNet_results\Dataset701
 
 Because you're using `fold=all`, there's no automatic validation. You have to check manually:
 
-1. **Hold out 2–3 images** before Step 3, don't include them in `imagesTr/`. Keep them aside as a "sanity check set."
+1. **Hold out 2–3 images** before Step 3, don't include them in `imagesTr/`. Keep them aside as a small test set.
 2. **After each candidate stop point** (e.g. epoch 150, 300, 500), run RESPAN with your fine-tuned model on the held-out images.
 3. **Compare outputs visually against your expectations.** Improved on the error modes you corrected? Still good on the easy cases? Pick that checkpoint.
 4. **If outputs get worse on easy cases as training progresses**, that's catastrophic forgetting, use the earlier checkpoint.
@@ -560,22 +562,13 @@ End-to-end, with 10 corrected images:
 ## FAQ
 
 **Q: How many corrected images do I need?**
-A: 5 is a working minimum; 10–20 is comfortable; 30+ gives the best results. The curve flattens after ~20.
+A: 5 at minimum; 10–20 should provide clear improvement
 
 **Q: Can I fine-tune from Model 1A and use it on Model 1Bv2 label scheme (or vice versa)?**
 A: No. The label scheme is encoded into the model's output layer. Fine-tune from the RESPAN model whose label scheme matches the data you're correcting.
 
-**Q: Do I need to retrain CARE or SelfNet too?**
-A: Only if restoration quality is poor for your data. Those are separate, independent models (trained via the RESPAN GUI's "CARE Training" and "SelfNet Training" tabs, see the main README). This guide covers segmentation only.
-
 **Q: Will fine-tuning make the model worse on the original RESPAN training data?**
 A: Possibly yes, fine-tuning trades generality for specificity. Keep the original Dataset219 bundle around in case you want to switch back. The two models can coexist side-by-side in `nnUNet_results\`.
-
-**Q: Can I use my fine-tuned model on a collaborator's machine?**
-A: Yes. Copy the entire `nnUNet_results\Dataset701_MySpineFineTune\` folder to their machine and set it as RESPAN's segmentation model.
-
-**Q: The RESPAN team asked me for my corrected data:** should I share it?
-A: If you're willing, yes! Correction-trained data is how RESPAN's next-generation public models improve. Contact the repo maintainers.
 
 ---
 
